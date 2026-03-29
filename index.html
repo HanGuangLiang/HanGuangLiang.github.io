@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>韵达查询动态码</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "微软雅黑", sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+            position: relative;
+            padding: 20px;
+        }
+
+        /* 水印样式 */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(45deg, rgba(150,150,150,0.1) 0px, rgba(150,150,150,0.1) 1px, transparent 1px, transparent 20px),
+                linear-gradient(to right, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.2) 100%);
+            background-size: 100% 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .title {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 40px;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 1px;
+            background-color: #ccc;
+        }
+
+        .password-box {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .password-item {
+            width: 70px;
+            height: 90px;
+            background-color: #444;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .progress-bar {
+            width: 80%;
+            height: 3px;
+            background-color: #eee;
+            margin: 0 auto 30px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-inner {
+            width: 100%; /* 初始100%，随时间递减 */
+            height: 100%;
+            background-color: #2196f3;
+            transition: width 1s linear; /* 每秒平滑变化 */
+        }
+
+        .tips {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 12px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-copy {
+            background: #1e88e5;
+        }
+
+        .btn-copy:hover {
+            background: #1565c0;
+        }
+
+        .toast {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 30px;
+            background: rgba(0,0,0,0.8);
+            color: #fff;
+            border-radius: 8px;
+            display: none;
+            z-index: 999;
+            font-size: 16px;
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 500px) {
+            .password-item {
+                width: 50px;
+                height: 70px;
+                font-size: 32px;
+            }
+
+            .title {
+                font-size: 24px;
+            }
+
+            .btn {
+                padding: 10px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="title">韵达查询动态码</div>
+        <div class="password-box" id="codeBox">
+            <div class="password-item">0</div>
+            <div class="password-item">0</div>
+            <div class="password-item">0</div>
+            <div class="password-item">0</div>
+            <div class="password-item">0</div>
+            <div class="password-item">0</div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-inner" id="progress"></div>
+        </div>
+        <div class="tips">注：输入动态码到电脑端完成登录</div>
+        <div class="btn-group">
+            <button class="btn btn-copy" onclick="copyCode()">复制动态码</button>
+        </div>
+    </div>
+    <div class="toast" id="toast">复制成功！</div>
+
+    <!-- CryptoJS依赖（SHA256） -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/crypto-js/4.2.0/sha256.min.js"></script>
+    <script>
+        // 核心密钥（与index2.html、C#端完全一致）
+        const YundaIdaasKey = "25a4063abf83d4485d942f6819e45146S9h1RWyluWh_idaas.yundasys.com";
+        const progress = document.getElementById('progress');
+        const codeBox = document.getElementById('codeBox');
+        const toast = document.getElementById('toast');
+        const totalSeconds = 300; // 5分钟=300秒
+        let remainingSeconds = totalSeconds;
+        let countdownTimer;
+
+        // 核心生成逻辑（完全复制index2.html，确保动态码一致）
+        function generateCode() {
+            try {
+                let now = new Date();
+                // UTC时间+5分钟分组
+                const utcHour = now.getUTCHours();
+                const utcMinute = now.getUTCMinutes();
+                const totalMinutes = utcHour * 60 + utcMinute;
+                const fiveMinuteGroup = Math.floor(totalMinutes / 5);
+                const groupStartMinute = fiveMinuteGroup * 5;
+                const groupHour = Math.floor(groupStartMinute / 60);
+                const groupMinute = groupStartMinute % 60;
+
+                // 构造UTC分组时间
+                const groupTime = new Date(Date.UTC(
+                    now.getUTCFullYear(),
+                    now.getUTCMonth(),
+                    now.getUTCDate(),
+                    groupHour,
+                    groupMinute,
+                    0
+                ));
+
+                // 290秒临界缓冲
+                const utcSecond = now.getUTCSeconds();
+                if (utcSecond > 290) {
+                    groupTime.setUTCMinutes(groupTime.getUTCMinutes() + 5);
+                }
+
+                // 生成时间因子
+                const timeFactor = [
+                    groupTime.getUTCFullYear().toString().padStart(4, '0'),
+                    (groupTime.getUTCMonth() + 1).toString().padStart(2, '0'),
+                    groupTime.getUTCDate().toString().padStart(2, '0'),
+                    groupTime.getUTCHours().toString().padStart(2, '0'),
+                    groupTime.getUTCMinutes().toString().padStart(2, '0')
+                ].join('');
+                const seed = `${YundaIdaasKey}_${timeFactor}`;
+
+                // SHA256哈希计算
+                const utf8Seed = CryptoJS.enc.Utf8.parse(seed);
+                const sha256Obj = CryptoJS.SHA256(utf8Seed);
+                const sha256Hex = sha256Obj.toString(CryptoJS.enc.Hex); // 小写16进制
+                const hashPrefix = sha256Hex.substring(0, 8); // 取前8位
+                const uintValue = parseInt(hashPrefix, 16); // 转无符号整数
+                const code = Math.floor(uintValue % 900000 + 100000); // 6位动态码
+                const finalCode = code.toString();
+
+                // 更新深色方块显示（拆分6位数字到每个方块）
+                const items = codeBox.querySelectorAll('.password-item');
+                items.forEach((item, index) => {
+                    item.textContent = finalCode[index];
+                });
+
+                return finalCode;
+            } catch (e) {
+                console.error("生成失败：", e);
+                // 异常时显示失败提示
+                const items = codeBox.querySelectorAll('.password-item');
+                items.forEach(item => item.textContent = "×");
+                return "生成失败";
+            }
+        }
+
+        // 进度条倒计时逻辑（自动刷新，无手动刷新）
+        function startCountdown() {
+            clearInterval(countdownTimer);
+            progress.style.width = '100%';
+
+            countdownTimer = setInterval(() => {
+                remainingSeconds--;
+                // 计算进度条宽度（百分比）
+                const progressPercent = (remainingSeconds / totalSeconds) * 100;
+                progress.style.width = `${progressPercent}%`;
+
+                // 时间到，自动刷新动态码
+                if (remainingSeconds <= 0) {
+                    remainingSeconds = totalSeconds;
+                    generateCode();
+                }
+            }, 1000); // 每秒更新一次
+        }
+
+        // 复制动态码功能
+        function copyCode() {
+            const items = codeBox.querySelectorAll('.password-item');
+            const code = Array.from(items).map(item => item.textContent).join('');
+            navigator.clipboard.writeText(code).then(() => {
+                toast.style.display = "block";
+                setTimeout(() => toast.style.display = "none", 1500);
+            }).catch(() => alert("复制失败，请手动复制！"));
+        }
+
+        // 页面加载初始化
+        window.onload = () => {
+            generateCode();
+            startCountdown();
+        };
+    </script>
+</body>
+</html>
