@@ -1,7 +1,7 @@
 <!文档类型html >
-<超文本标记语言 语言=“zh-CN”zh-CN
+<超文本标记语言 语言=“zh-CN”>
 <头>
-    <自指的 字符集=“UTF八号”“UTF八号"
+    <自指的 字符集=“UTF八号”>
     <自指的 名字="视窗" 内容=宽度=设备宽度，初始比例=1.0>
     <标题>韵达动态码生成器 - 管理员专用</标题>
     <风格>
@@ -9,7 +9,7 @@
             边缘: 0;
             填料: 0;
             盒子尺寸: 边框;
-            字体系列: "微软雅黑", “方平资深大律师”, “新Helvetica”, Helvetica, 天线, 无衬线字体;
+            字体系列: "微软雅黑", “方平资深大律师”, "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
         身体 {
             最小高度: 100vh;
@@ -25,31 +25,31 @@
             宽度: 100%;
             背景:# fff
             边框半径: 16像素;
-            box-shadow: 0 4px 20px rgba(21, 101, 192, 0.1);
-            padding: 40px 30px;
-            text-align: center;
+            箱形阴影: 0 4像素 20像素 rgba(21, 101, 192, 0.1);
+            填料: 40像素 30像素;
+            文本对齐: 中心;
         }
         .title {
             font-size: 24px;
             font-weight: bold;
-            color: #1565c0;
-            margin-bottom: 30px;
+颜色:# 1565c0
+边距-底部:30px
         }
-        .code-box {
-            margin: 20px 0;
+。代码框{
+边距:20px 0；
         }
-        .dynamic-code {
-            font-size: 60px;
-            font-weight: bold;
-            color: #dc0000;
-            letter-spacing: 8px;
-            margin: 15px 0;
-            word-break: break-all;
+。动态代码{
+字体大小:60px
+字体粗细:粗体；
+颜色:# dc0000
+字母间距:8px
+边距:15px 0；
+断字:全断；
         }
-        .expire {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 30px;
+。过期{
+字体大小:16px
+颜色:# 666；
+边距-底部:30px
         }
         .countdown {
             color: #dc0000;
@@ -261,4 +261,166 @@
                 a = ii(a, b, c, d, k[12], 6, 1700485571);
                 d = ii(d, a, b, c, k[3], 10, -1894986606);
                 c = ii(c, d, a, b, k[10], 15, -1051523);
-                b = ii(b, c, d, a,
+                b = ii(b, c, d, a, k[1], 21, -2054922799);
+                a = 二(a, b, c, d, k[8], 6, 1873313359);
+                d = 二(d, a, b, c, k[15], 10, -30611744);
+                c = 二(c, d, a, b, k[6], 15, -1560198380);
+                b = 二(b, c, d, a, k[13], 21, 1309151649);
+                a = 二(a, b, c, d, k[4], 6, -145523070);
+                d = 二(d, a, b, c, k[11], 10, -1120210379);
+                c = 二(c, d, a, b, k[2], 15, 718787259);
+                b = 二(b, c, d, a, k[9], 21, -343485551);
+                x[0] = add32(a, x[0]);
+                x[1] = add32(b, x[1]);
+                x[2] = add32(c, x[2]);
+                x[3] = add32(d, x[3]);
+            }
+            功能 cmn(q, a, b, x, s, t) {
+                返回 add32(add32(比特罗尔(a + q + x + t, s), b), 0);
+            }
+            function ff(a, b, c, d, x, s, t) {
+                return cmn((b & c) | ((~b) & d), a, b, x, s, t);
+            }
+            function gg(a, b, c, d, x, s, t) {
+                return cmn((b & d) | (c & (~d)), a, b, x, s, t);
+            }
+            function hh(a, b, c, d, x, s, t) {
+                return cmn(b ^ c ^ d, a, b, x, s, t);
+            }
+            function ii(a, b, c, d, x, s, t) {
+                return cmn(c ^ (b | (~d)), a, b, x, s, t);
+            }
+            function add32(a, b) {
+                var lsw = (a & 0xFFFF) + (b & 0xFFFF);
+                var msw = (a >> 16) + (b >> 16) + (lsw >> 16);
+                return (msw << 16) | (lsw & 0xFFFF);
+            }
+            function bitrol(n, c) {
+                return (n << c) | (n >>> (32 - c));
+            }
+            var str = unescape(encodeURIComponent(str));
+            var x = [];
+            定义变量 低输入联网（low-entry networking的缩写） = 潜艇用热中子反应堆（submarine thermal reactor的缩写）.长度;
+            定义变量 n = 0;
+            在…期间 (n < 低输入联网（low-entry networking的缩写）) {
+                x[n >> 2] |= (潜艇用热中子反应堆（submarine thermal reactor的缩写）.charCodeAt(n) & 0xFF) << ((n % 4) << 3);
+                n++;
+            }
+            x[低输入联网（low-entry networking的缩写） >> 2] |= 0x80 << ((低输入联网（low-entry networking的缩写） % 4) << 3);
+            x[((低输入联网（low-entry networking的缩写） + 64) >>> 9) << 4] = len * 8;
+            定义变量 a = 1732584193;
+            定义变量 b = -271733879;
+            定义变量 c = -1732584194;
+            定义变量 d = 271733878;
+            var k = [
+                3614090360, 3905402710, 606105819, 3250441966, 4118548399, 1200080426,
+                2821735955, 4249261313, 1770035416, 2336552879, 4294925233, 2304563134,
+                1804603682, 4254626195, 2794910416, 1373598401, 1554481492, 4171754650,
+                2007200788, 2894812759, 4237533241, 1504971641, 1559646752, 2013286116,
+                2777889161, 4199946430, 2240044497, 1873313359, 4290775857, 2279826560,
+                1583943025, 4104883801, 2734768916, 1430537140
+            ];
+            md5Cycle([a, b, c, d], k.slice(0, 16));
+            md5Cycle([a, b, c, d], k.slice(16, 32));
+            md5Cycle([a, b, c, d], k.slice(32, 48));
+            md5Cycle([a, b, c, d], k.slice(48, 64));
+            return ((a >>> 0).toString(16).padStart(8, '0') +
+                    (b >>> 0).toString(16).padStart(8, '0') +
+                    (c >>> 0).toString(16).padStart(8, '0') +
+                    (d >>> 0).toString(16).padStart(8, '0')).toLowerCase();
+        }
+
+        // 【修复版】安全的十六进制转32位整数（避免溢出）
+        function safeHexToInt32(hex) {
+            // 先转成BigInt避免溢出，再处理成32位有符号整数
+            const bigNum = BigInt('0x' + hex);
+            // 模拟C#的Int32范围（-2147483648 到 2147483647）
+            const maxInt32 = BigInt('2147483647');
+            const minInt32 = BigInt('-2147483648');
+            let num = bigNum;
+            // 超出范围时循环调整到范围内
+            while (num > maxInt32) num -= BigInt('4294967296'); // 2^32
+            while (num < minInt32) num += BigInt('4294967296');
+            return Number(num);
+        }
+
+        // 更新有效期信息和倒计时
+        function updateExpireInfo() {
+            // 清除原有定时器
+            if (countdownTimer) clearInterval(countdownTimer);
+            if (autoRefreshTimer) clearTimeout(autoRefreshTimer);
+            // 计算有效期结束时间（当前+1分钟）
+            const expireDate = new Date();
+            expireDate.setMinutes(expireDate.getMinutes() + 1);
+            // 格式化结束时间为HH:mm:ss
+            const expireTimeStr = `${String(expireDate.getHours()).padStart(2, '0')}:${String(expireDate.getMinutes()).padStart(2, '0')}:${String(expireDate.getSeconds()).padStart(2, '0')}`;
+            expireTimeEl.innerText = expireTimeStr;
+            // 初始化倒计时60秒
+            让 秒 = 60;
+            countdownEl.内部文本 = 秒;
+            // 启动倒计时
+            倒计时器 = 设置间隔(() => {
+                秒--;
+                countdownEl.内部文本 = 秒;
+                如果 (秒 <= 0) {
+                    clearInterval(countdownTimer);
+                    generateDynamicCode(); // 倒计时结束自动生成新码
+                }
+            }, 1000);
+            // 备用自动刷新（防止倒计时异常）
+            autoRefreshTimer = setTimeout(generateDynamicCode, 60 * 1000);
+        }
+
+        // 复制到剪贴板（兼容手机/电脑）
+        function copyToClipboard() {
+            常数 密码 = 动态代码.内部文本;
+            如果 (抄写板.剪贴板) {
+                领航员.剪贴板.写文本(密码).然后(() => {
+                    展示吐司('复制成功！');
+                }).捕捉(犯罪 => {
+                    // 降级方案：用input模拟复制
+                    常数 投入 = 文件.createElement('input');
+                    投入.价值 = 密码;
+                    文件.身体.appendChild(input);
+                    投入.挑选();
+                    文件.execCommand('复制');
+                    文件.身体.移除孩子(投入);
+                    展示吐司('复制成功！');
+                });
+            } 其他 {
+                // 兼容旧浏览器
+                常数 投入 = 文件.创建元素('输入');
+                投入.价值 = 密码;
+                文件.身体.appendchild(投入);
+                投入.挑选();
+                文件.execCommand('复制');
+                文件.身体.移除孩子(投入);
+                展示吐司('复制成功！');
+            }
+        }
+
+        // 显示提示弹窗
+函数展示吐司(味精) {
+            土司.内部文本 = 味精;
+            土司.风格.显示 = '阻止';
+            设置超时(() => {
+                土司.风格.显示 = '无';
+            }, 1500);
+        }
+
+        // 绑定按钮事件
+        功能 绑定事件() {
+            // 复制按钮
+btnCopyEl.addEventListener(点击，copyToClipboard)；btnCopyEl.addEventListener(点击, copyToClipboard);
+            // 手动刷新按钮
+btnrefreshel . addeventlistener(点击，生成的动态代码)；btnRefreshEl.addEventListener(点击, generateDynamicCode);
+        }
+
+        // 页面卸载时清除定时器
+        窗户.空载 = 功能() {
+            如果 (倒计时器) 间隙(倒计时器);
+            如果 (自动刷新计时器) 清除超时(自动刷新计时器);
+        };
+    </脚本>
+</身体>
+</超文本标记语言>
